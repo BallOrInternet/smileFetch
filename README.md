@@ -8,13 +8,13 @@ I'll soon be remaking art for all major distributions.
 
 To install smileFetch on any major Linux distribution, just open your terminal and paste this command:
 
-curl -sL "https://raw.githubusercontent.com/BallOrInternet/smileFetch/refs/heads/main/install.sh" -o /tmp/smilefetch
+`curl -sL "https://raw.githubusercontent.com/BallOrInternet/smileFetch/refs/heads/main/install.sh" -o /tmp/smilefetch`
 
 ##  How to Use
 
 Once the installation is complete, you can run the program from any directory in your terminal by simply typing:
 
-smilefetch
+`smilefetch`
 
 To stop the real-time update and close the program, just press `Ctrl + C`.
 ##  Requirements
