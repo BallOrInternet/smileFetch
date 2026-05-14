@@ -17,10 +17,11 @@ else
 fi
 
 # 2. Скачиваем сам скрипт smilefetch.py с твоего GitHub
-curl -sL "githubusercontent.com" -o /tmp/smilefetch
+curl -sL "https://raw.githubusercontent.com/BallOrInternet/smileFetch/refs/heads/main/SmileFetch.py" -o /tmp/smilefetch
 
 # 3. Переносим скачанный файл в системную папку бинарников и даем права на запуск
 sudo mv /tmp/smilefetch /usr/local/bin/smilefetch
 sudo chmod +x /usr/local/bin/smilefetch
 
 echo -e "\e[1;32m=== Installation complete! Run: smilefetch ===\e[0m"
+
