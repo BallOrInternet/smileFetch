@@ -8,7 +8,7 @@ I'll soon be remaking art for all major distributions.
 
 To install smileFetch on any major Linux distribution, just open your terminal and paste this command:
 
-curl -sL "githubusercontent.com" -o /tmp/smilefetch
+curl -sL "https://raw.githubusercontent.com/BallOrInternet/smileFetch/refs/heads/main/SmileFetch.py" -o /tmp/smilefetch
 
 ##  How to Use
 
@@ -19,4 +19,4 @@ smilefetch
 To stop the real-time update and close the program, just press `Ctrl + C`.
 ##  Requirements
 - Python 3
-- rich library (the installer installs it automatically using your system package manager)
+- \`rich\` library (the installer installs it automatically using your system package manager)
