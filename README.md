@@ -19,9 +19,10 @@ Once the installation is complete, you can run the program from any directory in
 ### 🎨 Supported Distro Logos
 The program automatically detects your OS or lets you force change the logo using flags. Currently, the following custom-resized logos are built-in:
 -  **Default Linux Tux** (for any unlisted distribution)
--  **Arch Linux**
+-  **Arch Linux** (work)
 -  **Linux Mint**
--  **CachyOS**
+-  **CachyOS** (work)
+-  **Manjaro Linux**
 ### Available Flags
 
 You can customize the output using these command-line arguments:
