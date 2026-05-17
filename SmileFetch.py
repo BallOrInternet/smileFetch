@@ -3,6 +3,7 @@ import os
 import platform
 import time
 import subprocess
+import datetime
 from rich.console import Console
 from rich.live import Live
 from rich.table import Table
@@ -10,66 +11,81 @@ from rich.table import Table
 console = Console()
 
 os.system('clear')
-def get_logo(os_name):
-    os_name = os_name.lower()      
+def get_logo(logo_name):
+    logo_name = str(logo_name).lower().strip()
     logo_cachy = [
-        "    /'''''''''''/         ",
-        "   /'''''''''''/   /      ",
-        "  /''''''/                ",
-        " /''''''/        /        ",
-        "/''''''/         //       ",
-        "\\......\\\                 ",
-        " \\......\\\            //  ",
-        "  \\......\\\          //   ",
-        "   \\............../       ",
-        "    \\............/        "
+        r"    /'''''''''''/         ",
+        r"   /'''''''''''/   /      ",
+        r"  /''''''/                ",
+        r" /''''''/        /        ",
+        r"/''''''/         //       ",
+        r"\......\\                 ",
+        r" \......\\            //  ",
+        r"  \......\\          //   ",
+        r"   \............../       ",
+        r"    \............/        "
     ]
 
     logo_arch = [
-        "         /\\\          ",
-        "        /  \\\         ",
-        "       /    \\\        ",
-        "      /  ()  \\\       ",
-        "     /   ||   \\\      ",
-        "    /   /  \\   \\\     ",
-        "   /   /    \\   \\\    ",
-        "  /   /_    _\\   \\\   ",
-        " /   /  |  |  \\   \\\  ",
-        "/___/   |__|   \\___\\\ "
+        r"         /\\          ",
+        r"        /  \\         ",
+        r"       /    \\        ",
+        r"      /  ()  \\       ",
+        r"     /   ||   \\      ",
+        r"    /   /  \   \\     ",
+        r"   /   /    \   \\    ",
+        r"  /   /_    _\   \\   ",
+        r" /   /  |  |  \   \\  ",
+        r"/___/   |__|   \___\\ "
     ]
 
     logo_mint = [
-        " ____________________     ",
-        "|                    \\    ",
-        "|_  |   ___________   |   ",
-        "  | |  /  __   __  \  |   ",
-        "  | |  | |  | |  | |  |   ",
-        "  | |  | |  | |  | |  |   ",
-        "  | |  | |  | |  | |  |   ",
-        "  | |  \_/  \_/  | |  |   ",
-        "  | \____________/_/  |   ",               
-        "  \\___________________/   "
+        r" ____________________     ",
+        r"|                    \    ",
+        r"|_  |   ___________   |   ",
+        r"  | |  /  __   __  \  |   ",
+        r"  | |  | |  | |  | |  |   ",
+        r"  | |  | |  | |  | |  |   ",
+        r"  | |  | |  | |  | |  |   ",
+        r"  | |  \_/  \_/  | |  |   ",
+        r"  | \____________/_/  |   ",               
+        r"  \___________________/   "
+    ]
+
+    logo_manjaro = [
+        r" ____________   _____      ",
+        r"|            | |     |     ",
+        r"|     _______| |     |     ",
+        r"|    |  _____  |     |     ",
+        r"|    | |     | |     |     ",
+        r"|    | |     | |     |     ",
+        r"|    | |     | |     |     ",
+        r"|    | |     | |     |     ",
+        r"|    | |     | |     |     ",
+        r"|____| |_____| |_____|     "
     ]
 
     logo_default = [
-        "    .-----.       ",
-        "   |(') (')|      ",
-        "   |       |      ",
-        "   |  :_/  |      ",
-        "  //      \ \     ",
-        " (|        | )    ",
-        " |           |    ",
-        "/'\_  ___ _/`\    ",
-        "|   \    /    |   ",
-        "\____)  (____/    "
+        r"    .-----.       ",
+        r"   |(') (')|      ",
+        r"   |       |      ",
+        r"   |  :_/  |      ",
+        r"  //      \ \     ",
+        r" (|        | )    ",
+        r" |           |    ",
+        r"/'\_  ___ _/`\    ",
+        r"|   \    /    |   ",
+        r"\____)  (____/    "
     ]
 
-    if "cachy" in os_name:
+    if "cachy" in logo_name:
         return logo_cachy, "bold cyan"
-    elif "arch" in os_name:
+    elif "arch" in logo_name:
         return logo_arch, "bold blue"
-    elif "mint" in os_name:
+    elif "mint" in logo_name:
         return logo_mint, "bold green"
+    elif "manjaro" in logo_name:
+        return logo_manjaro, "bold green"
     else:
         return logo_default, "bold white"
 
@@ -86,10 +102,12 @@ def get_info():
     info['user'] = f"{user}@{platform.node()}"
 
     # 2 # на каком диструбутиве (OS)
+    info['os'] = "Linux"
     with open("/etc/os-release") as f:
         lines = f.readlines()
         for line in lines:
             if line.startswith("PRETTY_NAME="):
+                # ИСПРАВЛЕНО: берем точный текст внутри кавычек [1]
                 info['os'] = line.split('"')[1]
 
     # 3 # ядрышко (Kernel)
@@ -131,25 +149,28 @@ def get_info():
 
     # 8 # (base)
     info['base_os'] = "Independent"
-    with open("/etc/os-release") as f:
-        for line in f:
-            if line.startswith("ID_LIKE="):
-                info['base_os'] = line.split('=')[1].strip().replace('"', '').capitalize()
-
-    # 9 #
     try:
-        import datetime
-        # Вытаскиваем первую строчку лога, где записана самая первая установка пакета
-        cmd = "head -n 1 /var/log/pacman.log | awk -F'[][]' '{print $2}'"
-        birth_raw = subprocess.check_output(cmd, shell=True).decode().strip()
-        
-        # Строка выглядит так: '2024-10-15T14:23:10+0300' или '2024-10-15 14:23'
-        # Берем только дату (первые 10 символов: ГГГГ-ММ-ДД)
-        date_str = birth_raw[:10]
-        
+        with open("/etc/os-release") as f:
+            for line in f:
+                if line.startswith("ID_LIKE="):
+                    info['base_os'] = line.split('=')[1].strip().replace('"', '').capitalize()
+    except:
+        pass
+
+    # 9 # Возраст системы
+    try:
+        if os.path.exists("/var/log/pacman.log"):
+            cmd = "head -n 1 /var/log/pacman.log | awk -F'[][]' '{print $2}'"
+            birth_raw = subprocess.check_output(cmd, shell=True).decode().strip()
+            date_str = birth_raw[:10]
+        elif os.path.exists("/var/log/dpkg.log"):
+            cmd = "head -n 1 /var/log/dpkg.log | awk '{print $1}'"
+            date_str = subprocess.check_output(cmd, shell=True).decode().strip()
+        else:
+            raise Exception()
+            
         install_date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
         now = datetime.datetime.now()
-        
         diff = now - install_date
         days = diff.days
         
@@ -159,9 +180,10 @@ def get_info():
 
     return info
 
-def make_layout():
+def make_layout(forced_logo = None):
     data = get_info()
-    logo, logo_color = get_logo(data['os'])
+    logo_target = forced_logo if forced_logo else data['os']
+    logo, logo_color = get_logo(logo_target)
 
     colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
     palette = "".join([f"[{c}]███[/{c}]" for c in colors])
@@ -192,7 +214,44 @@ def make_layout():
     return "\n".join(output_lines)
 
 if __name__ == "__main__":
-    with Live(make_layout(), console = console, refresh_per_second = 1) as live:
-        while True:
-            time.sleep(1)
-            live.update(make_layout())
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="smileFetch — A customizable real-time system fetch utility."
+    )
+    
+    parser.add_argument(
+        '-s', '--static', 
+        action='store_true', 
+        help='Print system info once and exit (no real-time loop)'
+    )
+    parser.add_argument(
+        '-n', '--no-color', 
+        action='store_true', 
+        help='Disable colored output'
+    )
+
+    parser.add_argument(
+        '-l', '--logo', 
+        type=str, 
+        default=None,
+        help='Force display a specific logo (e.g., arch, mint, cachy)'
+    )
+
+    args = parser.parse_args()
+
+    if args.no_color:
+        console = Console(color_system=None)
+
+    os.system('clear')
+
+    if args.static:
+        console.print(make_layout(forced_logo=args.logo))
+    else:
+        try:
+            with Live(make_layout(forced_logo=args.logo), console=console, refresh_per_second=1) as live:
+                while True:
+                    time.sleep(1)
+                    live.update(make_layout(forced_logo=args.logo))
+        except KeyboardInterrupt:
+            print("") 
