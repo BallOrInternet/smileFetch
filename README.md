@@ -20,7 +20,7 @@ Once the installation is complete, you can run the program from any directory in
 The program automatically detects your OS or lets you force change the logo using flags. Currently, the following custom-resized logos are built-in:
 -  **Default Linux Tux** (for any unlisted distribution)
 -  **Arch Linux** (work)
--  **Linux Mint**
+-  **Linux Mint** (work)
 -  **CachyOS** (work)
 -  **Manjaro Linux**
 ### Available Flags
