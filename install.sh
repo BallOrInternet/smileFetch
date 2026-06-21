@@ -20,7 +20,9 @@ fi
 curl -sL "https://raw.githubusercontent.com/BallOrInternet/smileFetch/refs/heads/main/SmileFetch.py" -o /tmp/smilefetch
 
 # 3. Переносим скачанный файл в системную папку бинарников и даем права на запуск
+sudo rm -f /usr/local/bin/smilefetch
 sudo mv /tmp/smilefetch /usr/local/bin/smilefetch
+sudo sed -i 's/\r$//' /usr/local/bin/smilefetch
 sudo chmod +x /usr/local/bin/smilefetch
 
 echo -e "\e[1;32m=== Installation complete! Run: smilefetch ===\e[0m"
