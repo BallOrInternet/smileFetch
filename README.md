@@ -22,6 +22,7 @@ The program automatically detects your OS or lets you force change the logo usin
 -  **Arch Linux** (work)
 -  **Linux Mint** (work)
 -  **CachyOS** (work)
+-  **CachyOS_old** (work)
 -  **Manjaro Linux**
 ### Available Flags
 
