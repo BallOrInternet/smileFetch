@@ -13,17 +13,30 @@ console = Console()
 os.system('clear')
 def get_logo(logo_name):
     logo_name = str(logo_name).lower().strip()
+    logo_cachy_old = [
+        r"    /,,,,...../           ",
+        r"   /,,,.,,,../   ()       ",
+        r"  /,,,,../                ",
+        r" /,,,.../     /'\         ",
+        r"/,...../      \,/         ",
+        r"\,,,,,,\\            _    ",
+        r" \,,....\\          / \   ",
+        r"  \...,..\\         \_/   ",
+        r"   \..,,,,,,,,,,,,/       ",
+        r"    \,,........,,/        "
+    ]
+
     logo_cachy = [
-        r"    /'''''''''''/         ",
-        r"   /'''''''''''/   /      ",
-        r"  /''''''/                ",
-        r" /''''''/        /        ",
-        r"/''''''/         //       ",
-        r"\......\\                 ",
-        r" \......\\            //  ",
-        r"  \......\\          //   ",
-        r"   \............../       ",
-        r"    \............/        "
+        r"    [bold blue]/,,,,[/][bold green]...../[/]           ",
+        r"   [bold blue]/,,,[/][bold green]..[/][bold blue],,[/][bold green]../[/]   [bold cyan]()[/]       ",
+        r"  [bold blue]/,,,,[/][bold green]../[/]                ",
+        r" [bold blue]/,,,[/][bold green].../[/]     [bold cyan]/'\\[/]         ",
+        r"[bold blue]/,[/][bold green]...../[/]      [bold cyan]\,/[/]         ",
+        r"[bold blue]\,,,,,,\\\\[/]             [bold cyan]_[/]   ",
+        r" [bold blue]\,,[/][bold green]....\\\\[/]           [bold cyan]/ \\[/]  ",
+        r"  [bold green]\...[/][bold blue],[/][bold green]..\\\\[/]          [bold cyan]\_/[/]  ",
+        r"   [bold green]\..[/][bold blue],,,,,,,,,,,,/[/]       ",
+        r"    [bold green]\\[/][bold blue],,[/][bold green]........[/][bold blue],,/[/]        "
     ]
 
     logo_arch = [
@@ -66,16 +79,16 @@ def get_logo(logo_name):
     ]
 
     logo_debian = [
-        r"                 ,--.          ",
-        r"               ./     '        ",
-        r"              /                ",
-        r"             /                  ",
-        r"            |                 ",
-        r"            |                  ",
-        r"            \                 ",
-        r"             \.                ",
-        r"               \.             ",
-        r"                 '-.._            "
+        r"      ,--.          ",
+        r"    ./     '        ",
+        r"   /                ",
+        r"  /                  ",
+        r" |                 ",
+        r" |                  ",
+        r"  \                 ",
+        r"   \.                ",
+        r"     \.             ",
+        r"      '-.._            "
     ]
 
     logo_default = [
@@ -91,8 +104,10 @@ def get_logo(logo_name):
         r"\____)  (____/    "
     ]
 
+    if "cachy_old" in logo_name:
+        return logo_cachy_old, "bold cyan"
     if "cachy" in logo_name:
-        return logo_cachy, "bold cyan"
+        return logo_cachy, "none"
     elif "arch" in logo_name:
         return logo_arch, "bold blue"
     elif "mint" in logo_name:
@@ -120,7 +135,6 @@ def get_info():
         lines = f.readlines()
         for line in lines:
             if line.startswith("PRETTY_NAME="):
-                # ИСПРАВЛЕНО: берем точный текст внутри кавычек [1]
                 info['os'] = line.split('"')[1]
 
     # 3 # ядрышко (Kernel)
@@ -201,6 +215,9 @@ def make_layout(forced_logo = None):
     colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
     palette = "".join([f"[{c}]███[/{c}]" for c in colors])
 
+    colors2 = ["bold black", "bold red", "bold green", "bold yellow", "bold blue", "bold magenta", "bold cyan", "bold white"]
+    palette2 = "".join([f"[{c}]███[/{c}]" for c in colors2])
+
     right_side = [
         f"[bold green]{data['user']}[/bold green]",
         "-" * len(data['user']),
@@ -213,18 +230,28 @@ def make_layout(forced_logo = None):
         f"[bold cyan]GPU:[/bold cyan]       {data['gpu']}",
         f"[bold cyan]RAM:[/bold cyan]       {data['ram']}",
         "",           
-        f"           {palette}"
+        f"           {palette}",
+        f"           {palette2}"
     ]
 
     output_lines = []
     max_lines = max(len(logo), len(right_side))
 
     for i in range(max_lines):
-        l_part = f"[{logo_color}]{logo[i]}[/{logo_color}]" if i < len(logo) else " " * 23
+        if i < len(logo):
+            if logo_color == "none":
+                l_part = logo[i]
+            else:
+                l_part = f"[{logo_color}]{logo[i]}[/{logo_color}]"
+        else:
+            fallback_width = len(logo[0]) if logo else 23
+            l_part = " " * fallback_width
+            
         r_part = right_side[i] if i < len(right_side) else " "
         output_lines.append(f"{l_part}   {r_part}")
 
     return "\n".join(output_lines)
+
 
 if __name__ == "__main__":
     import argparse
@@ -248,7 +275,7 @@ if __name__ == "__main__":
         '-l', '--logo', 
         type=str, 
         default=None,
-        help='Force display a specific logo (e.g., arch, mint, cachy)'
+        help='Force display a specific logo (e.g., arch, mint, cachy, cachy_old, manjaro)'
     )
 
     args = parser.parse_args()
