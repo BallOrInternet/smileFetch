@@ -231,7 +231,6 @@ def make_layout(forced_logo = None):
         f"[bold cyan]RAM:[/bold cyan]       {data['ram']}",
         "",           
         f"           {palette}",
-        f"           {palette2}"
     ]
 
     output_lines = []
