@@ -44,3 +44,5 @@ To stop the real-time update and close the program, just press `Ctrl + C`.
 ##  Requirements
 - Python 3
 - \`rich\` library (the installer installs it automatically using your system package manager)
+
+If you like this tool, please leave a star on GitHub!
