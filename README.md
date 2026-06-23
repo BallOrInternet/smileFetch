@@ -1,3 +1,5 @@
+<img width="884" height="259" alt="screenshot_2026-06-21_23-58-50" src="https://github.com/user-attachments/assets/31135018-a93e-4742-b7b4-0249b9826a2e" />
+
 #  smileFetch
 
 Smilefetch is a program very similar to Fastfetch, but it uses a smaller version of the logo, remade from Fastfetch and containing only the necessary information (at least for me). It also updates in real time without flickering.
@@ -16,6 +18,8 @@ Once the installation is complete, you can run the program from any directory in
 
 `smilefetch`
 
+<img width="847" height="250" alt="screenshot_2026-06-21_23-58-31" src="https://github.com/user-attachments/assets/b952c973-cd9c-4fac-b62d-545afae336cb" />
+
 ### 🎨 Supported Distro Logos
 The program automatically detects your OS or lets you force change the logo using flags. Currently, the following custom-resized logos are built-in:
 -  **Default Linux Tux** (for any unlisted distribution)
@@ -24,6 +28,9 @@ The program automatically detects your OS or lets you force change the logo usin
 -  **CachyOS** (work)
 -  **CachyOS_old** (work)
 -  **Manjaro Linux**
+
+<img width="814" height="248" alt="screenshot_2026-06-21_23-59-13" src="https://github.com/user-attachments/assets/110451b6-6b61-4a7c-b9c7-03bec0fdd31f" />
+
 ### Available Flags
 
 You can customize the output using these command-line arguments:
