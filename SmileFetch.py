@@ -26,6 +26,32 @@ def get_logo(logo_name):
         r"    \,,........,,/        "
     ]
 
+    logo_mint_old = [
+        r" ____________________     ",
+        r"|                    \    ",
+        r"|_  |   ___________   |   ",
+        r"  | |  /  __   __  \  |   ",
+        r"  | |  | |  | |  | |  |   ",
+        r"  | |  | |  | |  | |  |   ",
+        r"  | |  | |  | |  | |  |   ",
+        r"  | |  \_/  \_/  | |  |   ",
+        r"  | \____________/_/  |   ",               
+        r"  \___________________/   "
+    ]
+
+    logo_default_old = [
+        r"    .-----.       ",
+        r"   |(') (')|      ",
+        r"   |       |      ",
+        r"   |  :_/  |      ",
+        r"  //      \ \     ",
+        r" (|        | )    ",
+        r" |           |    ",
+        r"/'\_  ___ _/`\    ",
+        r"|   \    /    |   ",
+        r"\____)  (____/    "
+    ]
+
     logo_cachy = [
         r"    [bold blue]/,,,,[/][bold green]...../[/]           ",
         r"   [bold blue]/,,,[/][bold green]..[/][bold blue],,[/][bold green]../[/]   [bold cyan]()[/]       ",
@@ -39,6 +65,32 @@ def get_logo(logo_name):
         r"    [bold green]\\[/][bold blue],,[/][bold green]........[/][bold blue],,/[/]        "
     ]
 
+    logo_mint = [
+        r"[bold green] ____________________     [/]",
+        r"[bold green]|                    \    [/]",
+        r"[bold green]|_  [/][bold white]|   ___________[/][bold green]   |[/]   ",
+        r"[bold green]  | [/][bold white]|  /  __   __  \\[/][bold green]  |[/]   ",
+        r"[bold green]  | [/][bold white]|  | |  | |  | |[/][bold green]  |[/]   ",
+        r"[bold green]  | [/][bold white]|  | |  | |  | |[/][bold green]  |[/]   ",
+        r"[bold green]  | [/][bold white]|  | |  | |  | |[/][bold green]  |[/]   ",
+        r"[bold green]  | [/][bold white]|  \_/  \_/  | |[/][bold green]  |[/]   ",
+        r"[bold green]  | [/][bold white]\____________/_/[/][bold green]  |[/]   ",               
+        r"[bold green]  \___________________/   [/]"
+    ]
+
+    logo_default = [
+        r"[bold black]    .-----.       [/]",
+        r"[bold black]   |([/][bold white]'[/][bold black]) ([/][bold white]'[/][bold black])|[/]      ",
+        r"[bold black]   |       |      [/]",
+        r"[bold black]   |  [/][bold yellow]:_/[/]  [bold black]|[/]      ",
+        r"[bold black]  /[/][bold white]/      \\[/] [bold black]\     [/]",
+        r"[bold black] ([/][bold white]|        |[/] [bold black])    [/]",
+        r"[bold black] |           |    [/]",
+        r"[bold yellow]/'\_[/][bold black]  ___ [/][bold yellow]_/`\    [/]",
+        r"[bold yellow]|   \    /    |   [/]",
+        r"[bold yellow]\____)  (____/    [/]"
+    ]
+
     logo_arch = [
         r"         /\\          ",
         r"        /  \\         ",
@@ -50,19 +102,6 @@ def get_logo(logo_name):
         r"  /    ;    ;    \\   ",
         r" /   _,|    |,_   \\  ",
         r"/,.-'          '-.,\\ "
-    ]
-
-    logo_mint = [
-        r" ____________________     ",
-        r"|                    \    ",
-        r"|_  |   ___________   |   ",
-        r"  | |  /  __   __  \  |   ",
-        r"  | |  | |  | |  | |  |   ",
-        r"  | |  | |  | |  | |  |   ",
-        r"  | |  | |  | |  | |  |   ",
-        r"  | |  \_/  \_/  | |  |   ",
-        r"  | \____________/_/  |   ",               
-        r"  \___________________/   "
     ]
 
     logo_manjaro = [
@@ -91,31 +130,22 @@ def get_logo(logo_name):
         r"      '-.._            "
     ]
 
-    logo_default = [
-        r"    .-----.       ",
-        r"   |(') (')|      ",
-        r"   |       |      ",
-        r"   |  :_/  |      ",
-        r"  //      \ \     ",
-        r" (|        | )    ",
-        r" |           |    ",
-        r"/'\_  ___ _/`\    ",
-        r"|   \    /    |   ",
-        r"\____)  (____/    "
-    ]
-
     if "cachy_old" in logo_name:
         return logo_cachy_old, "bold cyan"
-    if "cachy" in logo_name:
+    elif "default_old" in logo_name:
+        return logo_default_old, "bold white"
+    elif "mint_old" in logo_name:
+        return logo_mint_old, "bold green"  # Возвращаем именно старый логотип
+    elif "cachy" in logo_name:
         return logo_cachy, "none"
     elif "arch" in logo_name:
         return logo_arch, "bold blue"
     elif "mint" in logo_name:
-        return logo_mint, "bold green"
+        return logo_mint, "none"            # Переключаем на внутренние цвета
     elif "manjaro" in logo_name:
         return logo_manjaro, "bold green"
     else:
-        return logo_default, "bold white"
+        return logo_default, "none"
 
 
 def get_info():
@@ -186,22 +216,31 @@ def get_info():
 
     # 9 # Возраст системы
     try:
+        import datetime
+        date_str = None
+
         if os.path.exists("/var/log/pacman.log"):
             cmd = "head -n 1 /var/log/pacman.log | awk -F'[][]' '{print $2}'"
             birth_raw = subprocess.check_output(cmd, shell=True).decode().strip()
-            date_str = birth_raw[:10]
+            date_str = birth_raw[:10] 
+
+        elif os.path.exists("/etc/timezone"):
+            install_time = os.path.getctime("/etc/timezone")
+            install_date = datetime.datetime.fromtimestamp(install_time)
+            date_str = install_date.strftime("%Y-%m-%d")
+
         elif os.path.exists("/var/log/dpkg.log"):
             cmd = "head -n 1 /var/log/dpkg.log | awk '{print $1}'"
             date_str = subprocess.check_output(cmd, shell=True).decode().strip()
+
+        if date_str:
+            install_date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+            now = datetime.datetime.now()
+            diff = now - install_date
+            days = diff.days
+            info['sys_age'] = f"{days} days (since {date_str})"
         else:
             raise Exception()
-            
-        install_date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
-        now = datetime.datetime.now()
-        diff = now - install_date
-        days = diff.days
-        
-        info['sys_age'] = f"{days} days (since {date_str})"
     except:
         info['sys_age'] = "Unknown"
 
@@ -215,9 +254,6 @@ def make_layout(forced_logo = None):
     colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
     palette = "".join([f"[{c}]███[/{c}]" for c in colors])
 
-    colors2 = ["bold black", "bold red", "bold green", "bold yellow", "bold blue", "bold magenta", "bold cyan", "bold white"]
-    palette2 = "".join([f"[{c}]███[/{c}]" for c in colors2])
-
     right_side = [
         f"[bold green]{data['user']}[/bold green]",
         "-" * len(data['user']),
@@ -230,7 +266,7 @@ def make_layout(forced_logo = None):
         f"[bold cyan]GPU:[/bold cyan]       {data['gpu']}",
         f"[bold cyan]RAM:[/bold cyan]       {data['ram']}",
         "",           
-        f"           {palette}",
+        f"           {palette}"
     ]
 
     output_lines = []
