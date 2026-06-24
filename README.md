@@ -27,8 +27,11 @@ The program automatically detects your OS or lets you force change the logo usin
 -  **Arch Linux** (work)
 -  **Linux Mint** (work)
 -  **CachyOS** (work)
--  **CachyOS_old** (work)
 -  **Manjaro Linux**
+
+-  **CachyOS_old** 
+-  **Linux Mint_old** 
+-  **Default Linux Tux_old** 
 
 <img width="814" height="248" alt="screenshot_2026-06-21_23-59-13" src="https://github.com/user-attachments/assets/110451b6-6b61-4a7c-b9c7-03bec0fdd31f" />
 
