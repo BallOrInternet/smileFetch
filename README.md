@@ -1,4 +1,5 @@
-<img width="884" height="259" alt="screenshot_2026-06-21_23-58-50" src="https://github.com/user-attachments/assets/31135018-a93e-4742-b7b4-0249b9826a2e" />
+<img width="901" height="276" alt="screenshot_2026-06-24_19-01-48" src="https://github.com/user-attachments/assets/68880246-655d-46b2-90fe-049c61511557" />
+
 
 #  smileFetch
 
