@@ -10,6 +10,26 @@ from rich.table import Table
 
 console = Console()
 
+def clean_hardware_string(text):
+    if not text:
+        return "Unknown"
+    # Убираем стандартный мусор из процессоров
+    for trash in ["(R)", "(TM)", "CPU", "@", "Processor", "Core"]:
+        text = text.replace(trash, "")
+    # Очищаем от длинных заводских названий видеокарт AMD/NVIDIA
+    if "Advanced Micro Devices" in text or "AMD/ATI" in text:
+        if "[" in text and "]" in text:
+            # Вытаскиваем чистое коммерческое название из квадратных скобок (например, Radeon RX 6700 XT)
+            text = text.split("[")[-1].split("]")[0].replace("Radeon", "").strip()
+            text = f"AMD Radeon {text}"
+    elif "NVIDIA" in text:
+        if "[" in text and "]" in text:
+            text = text.split("[")[-1].split("]")[0].strip()
+            text = f"NVIDIA {text}"
+            
+    # Убираем двойные пробелы, которые могли остаться после удаления слов
+    return " ".join(text.split()).strip()
+
 os.system('clear')
 def get_logo(logo_name):
     logo_name = str(logo_name).lower().strip()
@@ -104,6 +124,20 @@ def get_logo(logo_name):
         r"/,.-'          '-.,\\ "
     ]
 
+    pop_os = [
+        r"         , - ~ ~ ~ -,         "
+        r"     , '             ',     "
+        r"   ,                    ,   "
+        r"  ,                      ,  "
+        r" ,                        , "
+        r" ,                        , "
+        r" ,                        , "
+        r"  ,                       ,  "
+        r"   ,                     ,   "
+        r"     ,                 ,'    "
+        r"       ' - , _ _ _ ,  '       "
+    ]
+
     logo_manjaro = [
         r" ____________   _____      ",
         r"|            | |     |     ",
@@ -135,13 +169,13 @@ def get_logo(logo_name):
     elif "default_old" in logo_name:
         return logo_default_old, "bold white"
     elif "mint_old" in logo_name:
-        return logo_mint_old, "bold green"  # Возвращаем именно старый логотип
+        return logo_mint_old, "bold green"
     elif "cachy" in logo_name:
         return logo_cachy, "none"
     elif "arch" in logo_name:
         return logo_arch, "bold blue"
     elif "mint" in logo_name:
-        return logo_mint, "none"            # Переключаем на внутренние цвета
+        return logo_mint, "none"
     elif "manjaro" in logo_name:
         return logo_manjaro, "bold green"
     else:
@@ -246,10 +280,15 @@ def get_info():
 
     return info
 
-def make_layout(forced_logo = None):
+def make_layout(forced_logo = None, minimal = False):
+
     data = get_info()
     logo_target = forced_logo if forced_logo else data['os']
     logo, logo_color = get_logo(logo_target)
+
+    # Если флаг вызван, очищаем строки железа, иначе оставляем как есть
+    display_cpu = clean_hardware_string(data['cpu']) if minimal else data['cpu']
+    display_gpu = clean_hardware_string(data['gpu']) if minimal else data['gpu']
 
     colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
     palette = "".join([f"[{c}]███[/{c}]" for c in colors])
@@ -262,8 +301,8 @@ def make_layout(forced_logo = None):
         f"[bold cyan]Kernel:[/bold cyan]    {data['kernel']}",
         f"[bold cyan]Uptime:[/bold cyan]    {data['uptime']}",
         f"[bold cyan]Sys age:[/bold cyan]   {data['sys_age']}",
-        f"[bold cyan]CPU:[/bold cyan]       {data['cpu']}",
-        f"[bold cyan]GPU:[/bold cyan]       {data['gpu']}",
+        f"[bold cyan]CPU:[/bold cyan]       {display_cpu}", # Используем новые переменные
+        f"[bold cyan]GPU:[/bold cyan]       {display_gpu}", # вместо data['cpu'] и data['gpu']
         f"[bold cyan]RAM:[/bold cyan]       {data['ram']}",
         "",           
         f"           {palette}"
@@ -313,6 +352,13 @@ if __name__ == "__main__":
         help='Force display a specific logo (e.g., arch, mint, cachy, cachy_old, manjaro)'
     )
 
+    parser.add_argument(
+        '-m', '--minimal', 
+        action='store_true', 
+        help='Clean and shorten CPU and GPU strings for a minimalist look'
+    )
+
+
     args = parser.parse_args()
 
     if args.no_color:
@@ -321,12 +367,12 @@ if __name__ == "__main__":
     os.system('clear')
 
     if args.static:
-        console.print(make_layout(forced_logo=args.logo))
+        console.print(make_layout(forced_logo=args.logo, minimal=args.minimal))
     else:
         try:
-            with Live(make_layout(forced_logo=args.logo), console=console, refresh_per_second=1) as live:
+            with Live(make_layout(forced_logo=args.logo, minimal=args.minimal), console=console, refresh_per_second=1) as live:
                 while True:
                     time.sleep(1)
-                    live.update(make_layout(forced_logo=args.logo))
+                    live.update(make_layout(forced_logo=args.logo, minimal=args.minimal))
         except KeyboardInterrupt:
-            print("") 
+            print("")
