@@ -44,9 +44,10 @@ You can customize the output using these command-line arguments:
 * `smilefetch -n` or `smilefetch --no-color` — Disable colored output (black and white mode).
 * `smilefetch -h` or `smilefetch --help` — Show the automated help menu with all options.
 
+
 To stop the real-time update and close the program, just press `Ctrl + C`.
 ##  Requirements
 - Python 3
 - \`rich\` library (the installer installs it automatically using your system package manager)
 
-If you like this tool, please leave a star on GitHub!
+If you like this tool, please leave a star on GitHub!!
